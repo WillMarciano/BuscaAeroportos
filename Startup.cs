@@ -25,6 +25,7 @@ namespace BuscaAeroportos
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<MongoDbConfig>();
             services.AddControllersWithViews();
         }
 

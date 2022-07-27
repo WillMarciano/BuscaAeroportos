@@ -4,20 +4,23 @@ namespace BuscaAeroportos.Settings
 {
     public class MongoDbConfig
     {
-        private IConfiguration _configuration;
+        public IConfiguration Configuration { get; }
+
         public string Name { get; private set; }
         public string Host { get; private set; }
         public int Port { get; private set; }
         public string Collection { get; private set; }
         public string ConnectionString { get; private set; }
-        public MongoDbConfig(IConfiguration _config)
+
+        public MongoDbConfig(IConfiguration configuration)
         {
-            _configuration = _config;
-            Name = _config["MongoDbConfig:Name"].ToString();
-            Host = _config["MongoDbConfig:Host"].ToString();
-            Port = int.Parse(_config["MongoDbConfig:Port"].ToString());
-            Collection = _config["MongoDbConfig:Collection"].ToString();
+            Configuration = configuration;
+            Name = Configuration["MongoDbConfig:Name"].ToString();
+            Host = Configuration["MongoDbConfig:Host"].ToString();
+            Port = int.Parse(Configuration["MongoDbConfig:Port"].ToString());
+            Collection = Configuration["MongoDbConfig:Collection"].ToString();
             ConnectionString = $"mongodb://{Host}:{Port}";
+
         }
     }
 }

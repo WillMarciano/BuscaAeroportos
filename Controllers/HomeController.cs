@@ -22,6 +22,7 @@ namespace BuscaAeroportos.Controllers
         public HomeController(IConfiguration configuration)
         {
             _configuration = configuration;
+            _repository = new ConectandoMongoDbGeo(configuration);
         }
 
         public ActionResult Index()
@@ -56,7 +57,6 @@ namespace BuscaAeroportos.Controllers
             //Captura o valor da distancia
             int distancia = model.Distancia * 1000;
 
-            //Conecta MongoDB    
             var ponto = new GeoJson2DGeographicCoordinates(-118.325258, 34.103212);
             var localizacao = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(ponto);
             var condicao = Builders<Aeroporto>.Filter.NearSphere(x => x.loc, localizacao, 100000);

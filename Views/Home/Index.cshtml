@@ -6,11 +6,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Maps</title>
-    <link type="text/css" rel="stylesheet" href="~/Content/bootstrap.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
     <div style="height:100vh;">
-        <div id="panel-localiza-aeroporto" style="margin-top:50px;" class="col-md-offset-1 col-md-3">
+        <div id="panel-localiza-aeroporto" style="margin-top:10px;" class="col-md-offset-1 col-md-3">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="panel-title">Aeroportos Próximos de Você</div>
@@ -18,8 +21,8 @@
                 <div style="padding-top:30px" class="panel-body">
                     <form action="/Home/Localizar" id="form-localiza-aeroporto" class="form-horizontal" role="form" method="post">
 
-                        <div style="margin-bottom: 25px; width: 100%;" class="input-group">
-                            <label for="localizacao-endereco">Endereço:</label>
+                        <div style="width: 100%;" class="input-group">
+                            <label for="localizacao-endereco">Endereços:</label>
                             <input id="localizacao-endereco" type="text" class="form-control" name="endereco" value="Miami, Florida" placeholder="Onde você está agora?" required>
                         </div>
 
@@ -48,15 +51,14 @@
         </div> <!--#panel-localiza-aeroporto-->
         <div class="col-md-8" style="height: 100%; padding: 50px;">
             <div id="mapa_canvas">
-
             </div>
         </div>
     </div>
-
+    @*
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>*@
     <script type="text/javascript"
-            src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDfYaswgGQytvJJxRIXdw99o0eUZFml6LM">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfYaswgGQytvJJxRIXdw99o0eUZFml6LM">
     </script>
     <script type="text/javascript" language="javascript">
 
@@ -78,7 +80,7 @@
                 //label: { text: coords[0].Nome },
                 position: location,
                 map: map,
-                icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
             });
             map.setCenter(location);
 
@@ -87,7 +89,7 @@
                     //label: { text: coords[i].Nome },
                     position: new google.maps.LatLng(coords[i].Latitude, coords[i].Longitude),
                     map: map,
-                    icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                    icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
                 });
             }
 
@@ -102,19 +104,14 @@
                     distancia: $("#localizacao-distancia").val(),
                     tipo: $("#localizacao-tipoaeroporto").val(),
                 },
-                sucess = function (response) {
+                sucess = function(response) {
                     console.log(response);
                     renderMap(response);
                 }
             );
         }
 
-    //google.maps.event.addDomListener(window, 'load', renderMap);
+            //google.maps.event.addDomListener(window, 'load', renderMap);
     </script>
 </body>
 </html>
-
-
-
-
-
