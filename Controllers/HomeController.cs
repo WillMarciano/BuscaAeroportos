@@ -47,7 +47,7 @@ namespace BuscaAeroportos.Controllers
             double lon = Convert.ToDouble(coordLocal.Longitude.Replace(".", ","));
 
             //Testa o tipo de aeroporto que será usado na consulta
-            string tipoAero ="";
+            string tipoAero = "";
 
             if (model.Tipo == TipoAeroporto.Internacionais)
                 tipoAero = "International";
@@ -57,23 +57,28 @@ namespace BuscaAeroportos.Controllers
             //Captura o valor da distancia
             int distancia = model.Distancia * 1000;
 
-            var ponto = new GeoJson2DGeographicCoordinates(-118.325258, 34.103212);
+            //Configura o ponto atual no mapa 
+            var ponto = new GeoJson2DGeographicCoordinates(lon, lat);
             var localizacao = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(ponto);
-            var condicao = Builders<Aeroporto>.Filter.NearSphere(x => x.loc, localizacao, 100000);
-
-            var listaAeroportos = await _repository.Airports.Find(condicao).ToListAsync();
-            foreach (var item in listaAeroportos)
-            {
-                Console.WriteLine(item.ToJson<Aeroporto>());
-            }
-
-            //Configura o ponto atual no mapa           
 
             // filtro
+            var construtor = Builders<Aeroporto>.Filter;
+            var condicao = construtor.NearSphere(x => x.loc, localizacao, distancia);
+
+            if (tipoAero != "")
+                condicao = construtor.NearSphere(x => x.loc, localizacao, distancia) & construtor.Eq(x => x.type, tipoAero);
 
             //Captura  a lista
+            var listaAeroportos = await _repository.Airports.Find(condicao).ToListAsync();
 
             //Escreve os pontos
+            foreach (var item in listaAeroportos)
+            {
+                var aero = new Coordenada(item.name,
+                                          item.loc.Coordinates.Latitude.ToString(),
+                                          item.loc.Coordinates.Longitude.ToString());
+                aeroportosProximos.Add(aero);
+            }
 
             return Json(aeroportosProximos);
         }
@@ -101,7 +106,7 @@ namespace BuscaAeroportos.Controllers
         public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() 
+        public IActionResult Error()
             => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
